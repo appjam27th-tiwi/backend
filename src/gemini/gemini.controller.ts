@@ -222,26 +222,36 @@ export class GeminiController {
 					}
 				},
 				message: {
-					type: SchemaType.STRING,
-					example: '여행 코스: 부산 양정동 코스\n' +
-						'여행 기간은 1일이야\n' +
-						'< 코스 >\n' +
-						'부산역 → 양정동 (지하철 이동)\n' +
-						'부산역→ 양정역(부산지하철 1호선)\n' +
-						'소요 시간: 약 30분\n' +
-						'\n' +
-						'양정동 내 이동 (도보 또는 지역 버스)\n' +
-						'(1) 양정동 중앙시장(화장실 O)\n' +
-						'고고횟집(1인 가성비 횟집)\n' +
-						'\n' +
-						'(2) 양정동 카페 거리(화장실 O)\n' +
-						'카페 세컨드플로어\n' +
-						'카페 에이치\n' +
-						'\n' +
-						'(3) 부산 동래 온천(화장실 O)\n' +
-						'동래온천호텔\n' +
-						'\n' +
-						'총 경비: 약 50,000원'
+					type: SchemaType.OBJECT,
+					properties: {
+						courseName: {
+							type: SchemaType.STRING,
+							example: ['부산 양정동 코스']
+						},
+						duration: {
+							type: SchemaType.STRING,
+							example: ['1일']
+						},
+						course: {
+							type: SchemaType.ARRAY,
+							items: {
+								type: SchemaType.STRING,
+								example: [
+									'부산역 → 양정동 (지하철 이동)',
+									'부산역→ 양정역(부산지하철 1호선)',
+								]
+							}
+						},
+						time: {
+							type: SchemaType.STRING,
+							example: ['약 30분']
+						},
+						money: {
+							type: SchemaType.STRING,
+							example: ['약 50,000원']
+						}
+					},
+					required: ['courseName', 'duration', 'course', 'time', 'money']
 				}
 			},
 			required: ['hotel', 'course', 'message']
@@ -262,6 +272,24 @@ export class GeminiController {
 
 		const data = await model.generateContent(prompt, );
 
-		return JSON.parse(data.response.text());
+		const result = JSON.parse(data.response.text())
+
+		const message = `여행 코스: ${result.message.courseName}
+` +
+			`여행 기간은 ${result.message.duration}이야
+` +
+			'< 코스 >\n' +
+			result.message.course.join('\n') +
+			`\n소요 시간: ${result.message.time}
+` +
+			'\n' +
+			`총 경비: ${result.message.money}
+		`
+
+		result.message = message;
+
+
+		return result;
+
 	}
 }
