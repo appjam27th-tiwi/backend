@@ -263,7 +263,7 @@ export class GeminiController {
 			2. Provide accurate latitude and longitude coordinates for every location.
 			3. Adjust times to avoid any overlap.
 			4. Do not place food locations consecutively, and avoid revisiting locations from previous days.
-			5. Summarize the total course and message it like the example. message.time unit is minute.
+			5. Summarize the total course and message it like the example. message.time unit is minute. course in order
 			6. The response should be in Korean.
 
 			Specific modification request: ${JSON.stringify(body.message)}
