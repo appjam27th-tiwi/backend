@@ -15,7 +15,7 @@ async function bootstrap() {
   )
 
   app.enableCors({
-    origin: [ 'http://localhost:5173', 'https://f9e9-218-234-61-40.ngrok-free.app/', 'https://appjam.devfiro.com' ],
+    origin: [ 'http://localhost:5173', 'https://f9e9-218-234-61-40.ngrok-free.app/', 'https://appjam27.devfiro.com' ],
     credentials: true,
     methods: ['*'],
     allowedHeaders: ['*']
