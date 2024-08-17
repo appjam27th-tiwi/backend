@@ -56,70 +56,71 @@ export class GeminiController {
 		@Query('day') day: number,
 		@Query('sleepDay') sleepDay: number
 	) {
-		const model = this.geminiService.generateModel({
-			type: SchemaType.OBJECT,
-			properties: {
-				hotel: {
-					type: SchemaType.OBJECT,
-					properties: {
-						name: NameType,
-						address: AddressType
-					}
-				},
-				course: {
-					type: SchemaType.ARRAY,
-					items: {
+		try {
+			const model = this.geminiService.generateModel({
+				type: SchemaType.OBJECT,
+				properties: {
+					hotel: {
+						type: SchemaType.OBJECT,
+						properties: {
+							name: NameType,
+							address: AddressType
+						}
+					},
+					course: {
 						type: SchemaType.ARRAY,
 						items: {
-							type: SchemaType.OBJECT,
-							properties: {
-								name: NameType,
-								address: AddressType,
-								time: {
-									type: SchemaType.OBJECT,
-									properties: {
-										start: {
-											type: SchemaType.STRING,
-											example: [
-												'09:00',
-												'10:00',
-												'11:00',
-											]
+							type: SchemaType.ARRAY,
+							items: {
+								type: SchemaType.OBJECT,
+								properties: {
+									name: NameType,
+									address: AddressType,
+									time: {
+										type: SchemaType.OBJECT,
+										properties: {
+											start: {
+												type: SchemaType.STRING,
+												example: [
+													'09:00',
+													'10:00',
+													'11:00',
+												]
+											},
+											end: {
+												type: SchemaType.STRING,
+												example: [
+													'10:00',
+													'11:00',
+													'12:00',
+												]
+											}
 										},
-										end: {
-											type: SchemaType.STRING,
-											example: [
-												'10:00',
-												'11:00',
-												'12:00',
-											]
-										}
+										required: [ 'start', 'end' ]
 									},
-									required: ['start', 'end']
+									type: {
+										type: SchemaType.STRING,
+										enum: [
+											'sightseeing',
+											'food',
+											'shopping',
+										]
+									}
 								},
-								type: {
-									type: SchemaType.STRING,
-									enum: [
-										'sightseeing',
-										'food',
-										'shopping',
-									]
-								}
-							},
-							required: ['name', 'address', 'time', 'type']
+								required: [ 'name', 'address', 'time', 'type' ]
+							}
 						}
 					}
-				}
-			},
-			required: ['hotel', 'course']
-		});
+				},
+				required: [ 'hotel', 'course' ]
+			});
 
-		const prompt = `
-			I am planning a trip to ${location}. Please create a detailed itinerary based on the following strict requirements:
-			1. Recommend only real hotels, tourist attractions, and restaurants that are actually located in or near ${location}.
-			2. Recommend exactly one hotel near ${location} and list it first in the itinerary.
+			const prompt = `
+			I am planning a trip to ${ location }. Please create a detailed itinerary based on the following strict requirements:
+			1. Recommend only real hotels, tourist attractions, and restaurants that are actually located in or near ${ location }.
+			2. Recommend exactly one hotel near ${ location } and list it first in the itinerary.
 			3. Provide accurate latitude and longitude coordinates for every place, ensuring they match the actual locations.
-			4. The itinerary should cover ${day} days and include ${day} separate courses, with no overlap in times.
+			4. The itinerary should cover ${ day } days and include ${ day } separate courses, with no overlap in times.
 			5. Do not recommend food places consecutively, and avoid revisiting any locations from previous days.
 			6. All times must be non-overlapping and logically sequenced.
 			7. Ensure that the response is provided in Korean.
@@ -127,12 +128,19 @@ export class GeminiController {
 			Be as accurate and detailed as possible, adhering to these requirements to avoid any mistakes.
 		`;
 
-		console.log(prompt);
+			console.log(prompt);
 
-		const data = await model.generateContent(prompt);
+			const data = await model.generateContent(prompt);
 
-		// Return response in Korean
-		return JSON.parse(data.response.text());
+			// Return response in Korean
+			return JSON.parse(data.response.text());
+		} catch (error) {
+			return {
+				error: {
+					message: error.message
+				}
+			}
+		}
 	}
 
 	@Post('/fix')
