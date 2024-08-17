@@ -243,12 +243,11 @@ export class GeminiController {
 							}
 						},
 						time: {
-							type: SchemaType.STRING,
-							example: ['약 30분']
+							type: SchemaType.INTEGER,
+							description: '단위: 분'
 						},
 						money: {
-							type: SchemaType.STRING,
-							example: ['약 50,000원']
+							type: SchemaType.INTEGER,
 						}
 					},
 					required: ['courseName', 'duration', 'course', 'time', 'money']
@@ -264,7 +263,7 @@ export class GeminiController {
 			2. Provide accurate latitude and longitude coordinates for every location.
 			3. Adjust times to avoid any overlap.
 			4. Do not place food locations consecutively, and avoid revisiting locations from previous days.
-			5. Summarize the total course and message it like the example.
+			5. Summarize the total course and message it like the example. message.time unit is minute.
 			6. The response should be in Korean.
 
 			Specific modification request: ${JSON.stringify(body.message)}
@@ -280,10 +279,10 @@ export class GeminiController {
 ` +
 			'< 코스 >\n' +
 			result.message.course.join('\n') +
-			`\n소요 시간: ${result.message.time}
+			`\n소요 시간: 약 ${result.message.time}분
 ` +
 			'\n' +
-			`총 경비: ${result.message.money}
+			`총 경비: 약 ${result.message.money}원
 		`
 
 		result.message = message;
