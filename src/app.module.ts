@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { validationSchema } from './config/validationSchema';
 import { GeminiModule } from './gemini/gemini.module';
+import { DrivingModule } from './driving/driving.module';
 
 
 @Module({
@@ -11,7 +12,8 @@ import { GeminiModule } from './gemini/gemini.module';
       isGlobal: true,
       validationSchema,
     }),
-    GeminiModule
+    GeminiModule,
+    DrivingModule
   ],
 })
 export class AppModule {}
