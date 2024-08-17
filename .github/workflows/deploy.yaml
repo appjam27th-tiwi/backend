@@ -21,6 +21,6 @@ jobs:
           port: ${{ secrets.LOCAL_SERVER_PORT }}
           script: |
             cd /home/sunrintoday/projects/appjam
-            git pull origin mai
+            git pull origin main
             yarn install
             pm2 restart AppJam
