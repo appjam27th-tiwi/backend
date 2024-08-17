@@ -278,12 +278,7 @@ export class GeminiController {
 			`여행 기간은 ${result.message.duration}이야
 ` +
 			'< 코스 >\n' +
-			result.message.course.join('\n') +
-			`\n소요 시간: 약 ${result.message.time}분
-` +
-			'\n' +
-			`총 경비: 약 ${result.message.money}원
-		`
+			result.message.course.join('\n')
 
 		result.message = message;
 
