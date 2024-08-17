@@ -128,7 +128,6 @@ export class GeminiController {
 			Be as accurate and detailed as possible, adhering to these requirements to avoid any mistakes.
 		`;
 
-			console.log(prompt);
 
 			const data = await model.generateContent(prompt);
 

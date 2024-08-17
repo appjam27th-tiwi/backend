@@ -15,7 +15,7 @@ async function bootstrap() {
   )
 
   app.enableCors({
-    origin: [ 'http://localhost:5173' ],
+    origin: [ 'http://localhost:5173', 'https://f9e9-218-234-61-40.ngrok-free.app/' ],
     credentials: true,
     methods: ['*'],
     allowedHeaders: ['*']
