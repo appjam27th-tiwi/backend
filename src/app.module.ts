@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { validationSchema } from './config/validationSchema';
+import { GeminiModule } from './gemini/gemini.module';
 
 
 @Module({
@@ -10,6 +11,7 @@ import { validationSchema } from './config/validationSchema';
       isGlobal: true,
       validationSchema,
     }),
+    GeminiModule
   ],
 })
 export class AppModule {}
