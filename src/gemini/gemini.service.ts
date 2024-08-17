@@ -16,7 +16,8 @@ export class GeminiService {
 			generationConfig: {
 				responseMimeType: 'application/json',
 				responseSchema,
-			}
+				temperature: 0.1,
+			},
 		})
 
 		return model;

@@ -110,9 +110,31 @@ export class GeminiController {
 								required: [ 'name', 'address', 'time', 'type' ]
 							}
 						}
+					},
+					message: {
+						type: SchemaType.STRING,
+						example: '여행 코스: 부산 양정동 코스\n' +
+							'여행 기간은 1일이야\n' +
+							'< 코스 >\n' +
+							'부산역 → 양정동 (지하철 이동)\n' +
+							'부산역→ 양정역(부산지하철 1호선)\n' +
+							'소요 시간: 약 30분\n' +
+							'\n' +
+							'양정동 내 이동 (도보 또는 지역 버스)\n' +
+							'(1) 양정동 중앙시장(화장실 O)\n' +
+							'고고횟집(1인 가성비 횟집)\n' +
+							'\n' +
+							'(2) 양정동 카페 거리(화장실 O)\n' +
+							'카페 세컨드플로어\n' +
+							'카페 에이치\n' +
+							'\n' +
+							'(3) 부산 동래 온천(화장실 O)\n' +
+							'동래온천호텔\n' +
+							'\n' +
+							'총 경비: 약 50,000원'
 					}
 				},
-				required: [ 'hotel', 'course' ]
+				required: [ 'hotel', 'course', 'message' ]
 			});
 
 			const prompt = `
@@ -123,7 +145,8 @@ export class GeminiController {
 			4. The itinerary should cover ${ day } days and include ${ day } separate courses, with no overlap in times.
 			5. Do not recommend food places consecutively, and avoid revisiting any locations from previous days.
 			6. All times must be non-overlapping and logically sequenced.
-			7. Ensure that the response is provided in Korean.
+			7. Summarize the total course and message it like the example. 
+			8. Ensure that the response is provided in Korean.
 
 			Be as accurate and detailed as possible, adhering to these requirements to avoid any mistakes.
 		`;
@@ -197,9 +220,31 @@ export class GeminiController {
 							required: ['name', 'address', 'time', 'type']
 						}
 					}
+				},
+				message: {
+					type: SchemaType.STRING,
+					example: '여행 코스: 부산 양정동 코스\n' +
+						'여행 기간은 1일이야\n' +
+						'< 코스 >\n' +
+						'부산역 → 양정동 (지하철 이동)\n' +
+						'부산역→ 양정역(부산지하철 1호선)\n' +
+						'소요 시간: 약 30분\n' +
+						'\n' +
+						'양정동 내 이동 (도보 또는 지역 버스)\n' +
+						'(1) 양정동 중앙시장(화장실 O)\n' +
+						'고고횟집(1인 가성비 횟집)\n' +
+						'\n' +
+						'(2) 양정동 카페 거리(화장실 O)\n' +
+						'카페 세컨드플로어\n' +
+						'카페 에이치\n' +
+						'\n' +
+						'(3) 부산 동래 온천(화장실 O)\n' +
+						'동래온천호텔\n' +
+						'\n' +
+						'총 경비: 약 50,000원'
 				}
 			},
-			required: ['hotel', 'course']
+			required: ['hotel', 'course', 'message']
 		});
 
 		const prompt = `
@@ -209,12 +254,13 @@ export class GeminiController {
 			2. Provide accurate latitude and longitude coordinates for every location.
 			3. Adjust times to avoid any overlap.
 			4. Do not place food locations consecutively, and avoid revisiting locations from previous days.
-			5. The response should be in Korean.
+			5. Summarize the total course and message it like the example.
+			6. The response should be in Korean.
 
 			Specific modification request: ${JSON.stringify(body.message)}
 		`;
 
-		const data = await model.generateContent(prompt);
+		const data = await model.generateContent(prompt, );
 
 		return JSON.parse(data.response.text());
 	}
