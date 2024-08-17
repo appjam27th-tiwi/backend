@@ -1,10 +1,12 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('driving')
 export class DrivingController {
 	constructor(
-		private readonly httpService: HttpService
+		private readonly httpService: HttpService,
+		private readonly configService: ConfigService
 	) {
 	}
 
@@ -15,11 +17,11 @@ export class DrivingController {
 		@Query('waypoints') waypoints: string
 	) {
 		try {
-			return await this.httpService.get(`https://naveropenapi.apigw.ntruss.com/map-direction/v1/driving?start=${ start }&goal=${ goal }&waypoints=${ waypoints }`, {
+			return this.httpService.get(`https://naveropenapi.apigw.ntruss.com/map-direction/v1/driving?start=${ start }&goal=${ goal }&waypoints=${ waypoints }`, {
 				headers: {
-					'X-NCP-APIGW-API-KEY-ID': process.env.NAVER_CLIENT_ID,
-					'X-NCP-APIGW-API-KEY': process.env.NAVER_CLIENT_SECRET
-				}
+					'X-NCP-APIGW-API-KEY-ID': this.configService.get('NAVER_CLIENT_ID'),
+					'X-NCP-APIGW-API-KEY': this.configService.get('NAVER_CLIENT_SECRET'),
+				},
 			})
 		} catch (error) {
 			console.error(error);
