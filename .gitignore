@@ -42,6 +42,14 @@ lerna-debug.log*
 .env.production.local
 .env.local
 
+.yarn/*
+!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
 # temp directory
 .temp
 .tmp
